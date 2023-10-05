@@ -44,14 +44,37 @@ class ISBN(models.Model):
 # when you create an instance of the isbn model books instance will be automatically created 
 '''
     
-class Books(models.Model):
-    title = models.CharField(max_length = 200)
-    price = models.FloatField()
+
     
+
+
+class Author(models.Model):
+    name = models.CharField(max_length=100)
+    age = models.IntegerField(null=True, blank=True)
+    gender = models.CharField(max_length= 5, blank=True, null=True)
     
+    def __str__(self):
+        return self.name
+
+class Blog(models.Model):
+    title = models.CharField(max_length=200)
+    content = models.TextField()
+    author = models.ForeignKey(Author, on_delete=models.CASCADE)
+
     def __str__(self):
         return self.title
     
-class ISBN(Books):
-    isbn_number = models.CharField(max_length=16)
+class Publishers(models.Model):
+    name = models.CharField(max_length=100)
+    blogs = models.ManyToManyField(Blog)
     
+    def __str__(self):
+        return self.name
+    
+    
+class Products(models.Model):
+    name = models.CharField(max_length=100)
+    price = models.IntegerField()
+    
+    def __str__(self):
+        return self.name

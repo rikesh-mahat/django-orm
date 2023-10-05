@@ -116,8 +116,30 @@ def teachers(request):
 
 
 # aggregate and annotate
+- from django.db.models import Count, Sum, Avg, Min, Max
+- total_price = Products.objects.aggregate(Sum('price'))['price__sum']
+// without using ['price__sum'] -> output : {'price__sum' : numbers} else numbers
+- min_price = Products.objects.aggrgate(Avg('price'))['price__min']
+- max_price = Products.objects.aggregate(Max('price'))['price__max']
 
+- publisher = Publisher.objects.annotate(blogs_count = Count('blogs'))
+- publisher = Publisher.objects.filter(name__iexact = "E.R Clark").annotate(blogs_count = Count('blogs))
 
 # select_related and prefetch_related
+
+# select_related(one-to-many/foreign key, one-one)
+
+- data = Blog.objects.select_related("author").all()
+- data[0].author   # immediately available no later sql trigger due to inner join
+- data = Blog.objects.all()
+- data = data[0].author # sql query triggered
+
+- data = Blog.objects.select_related('author').all()
+
+# prefetch_related(reverse foreign_key & many-to-many relationship)
+
+authors = Author.objects.prefetch_related('blog_set').all()
+publishers = Publishers.objects.prefetch_related('blogs').all()
+
 
 '''
